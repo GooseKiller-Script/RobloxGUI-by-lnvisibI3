@@ -72,7 +72,7 @@ local Title = Instance.new("TextLabel", Menu)
 Title.Size = UDim2.new(1, 0, 0, 45)
 Title.Position = UDim2.new(0, 0, 0, 5)
 Title.BackgroundTransparency = 1
-Title.Text = "Roblox GUI"
+Title.Text = "Roblox"
 Title.TextColor3 = MENU_STROKE_COLOR
 Title.Font = Enum.Font.GothamBold
 Title.TextScaled = true
@@ -157,10 +157,6 @@ end
 
 local isSpying = false
 local remoteSpyLogWindow = nil
-
-CreateButton(ScrollFrame, "AntiCheat Detector", function()
-	print("Anti-cheat detector is currently empty")
-end)
 
 CreateButton(ScrollFrame, "Infinite Yield FE", function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
