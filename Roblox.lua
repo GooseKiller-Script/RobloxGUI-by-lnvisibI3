@@ -1,5 +1,4 @@
-
-local Players = game:GetService("Players")
+Local Players = game:GetService("Players")
 local LP = Players.LocalPlayer
 local UIS = game:GetService("UserInputService")
 local StarterGui = game:GetService("StarterGui")
@@ -161,6 +160,236 @@ end)
 
 CreateButton(ScrollFrame, "lnvisibI3-GUI", function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/GooseKiller-Script/GK-GUI-By-GooseKiller-Universal-Roblox-Script/refs/heads/main/GUI.lua"))()
+end)
+
+CreateButton(ScrollFrame, "Place Scanner", function()
+	local foundVulnerabilities = {}
+	local scanStarted = false
+
+	if not scanStarted then
+		scanStarted = true
+		
+		for _, descendant in ipairs(game:GetDescendants()) do
+			if descendant:IsA("Script") or descendant:IsA("LocalScript") then
+				pcall(function()
+					local sourceCode = descendant.Source
+					if sourceCode then
+						local lines = sourceCode:split("\n")
+						for i, line in ipairs(lines) do
+							if line:match("require%(%d+%)") then
+								table.insert(foundVulnerabilities, {
+									name = "Potential Backdoor",
+									path = descendant:GetFullName(),
+									lineNumber = i,
+									lineText = line
+								})
+							end
+							if line:match("getfenv") or line:match("setfenv") then
+								table.insert(foundVulnerabilities, {
+									name = "Environment Manipulation",
+									path = descendant:GetFullName(),
+									lineNumber = i,
+									lineText = line
+								})
+							end
+							if line:match("RemoteFunction") or line:match("RemoteEvent") then
+								table.insert(foundVulnerabilities, {
+									name = "Remote Object Found",
+									path = descendant:GetFullName(),
+									lineNumber = i,
+									lineText = line
+								})
+							end
+							if line:match("FireServer") or line:match("InvokeServer") then
+								table.insert(foundVulnerabilities, {
+									name = "Server Communication",
+									path = descendant:GetFullName(),
+									lineNumber = i,
+									lineText = line
+								})
+							end
+						end
+					end
+				end)
+			end
+		end
+
+		if #foundVulnerabilities > 0 then
+			local resultWindow = Instance.new("ScreenGui", game.CoreGui)
+			resultWindow.ResetOnSpawn = false
+			
+			local frame = Instance.new("Frame", resultWindow)
+			frame.Size = UDim2.new(0, 400, 0, 500)
+			frame.Position = UDim2.new(0.5, -200, 0.5, -250)
+			frame.BackgroundColor3 = MENU_COLOR
+			Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 10)
+			MakeDraggable(frame)
+
+			local title = Instance.new("TextLabel", frame)
+			title.Size = UDim2.new(1, 0, 0, 30)
+			title.Text = "Scan Results"
+			title.TextColor3 = MENU_STROKE_COLOR
+			title.BackgroundTransparency = 1
+
+			local closeBtn = Instance.new("TextButton", frame)
+			closeBtn.Size = UDim2.new(0, 30, 0, 30)
+			closeBtn.Position = UDim2.new(1, -35, 0, 0)
+			closeBtn.Text = "✕"
+			closeBtn.BackgroundColor3 = CLOSE_BUTTON_COLOR
+			closeBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+			closeBtn.Font = Enum.Font.GothamBold
+			closeBtn.MouseButton1Click:Connect(function()
+				resultWindow:Destroy()
+			end)
+
+			local textScroll = Instance.new("ScrollingFrame", frame)
+			textScroll.Size = UDim2.new(1, -20, 1, -50)
+			textScroll.Position = UDim2.new(0, 10, 0, 40)
+			textScroll.BackgroundTransparency = 1
+			textScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+			textScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+
+			local resultText = Instance.new("TextLabel", textScroll)
+			resultText.Size = UDim2.new(1, 0, 0, 0)
+			resultText.Position = UDim2.new(0, 0, 0, 0)
+			resultText.BackgroundTransparency = 1
+			resultText.Font = Enum.Font.SourceSans
+			resultText.TextSize = 14
+			resultText.TextColor3 = MENU_STROKE_COLOR
+			resultText.TextXAlignment = Enum.TextXAlignment.Left
+			resultText.TextYAlignment = Enum.TextYAlignment.Top
+			resultText.TextWrapped = true
+
+			local fullText = ""
+			for _, vuln in ipairs(foundVulnerabilities) do
+				fullText = fullText .. "• Уязвимость: " .. vuln.name .. "\n"
+				fullText = fullText .. "• Путь: " .. vuln.path .. "\n"
+				fullText = fullText .. "• Строка: " .. vuln.lineNumber .. "\n"
+				fullText = fullText .. "• Код: " .. vuln.lineText:gsub("^%s+", ""):gsub("%s+$", "") .. "\n\n"
+			end
+			resultText.Text = fullText
+			resultText.Size = UDim2.new(1, 0, 0, resultText.TextFits)
+			
+			textScroll.CanvasSize = UDim2.new(0, 0, 0, resultText.TextFits + 20)
+
+		else
+			local noResults = Instance.new("TextLabel")
+			noResults.Parent = game.CoreGui
+			noResults.Text = "❌ Уязвимостей не найдено! ❌"
+			noResults.TextColor3 = Color3.fromRGB(255, 0, 0)
+			noResults.BackgroundTransparency = 1
+			noResults.Position = UDim2.new(0.5, -100, 0.5, -25)
+			noResults.Size = UDim2.new(0, 200, 0, 50)
+			noResults.Font = Enum.Font.GothamBold
+			noResults.TextSize = 18
+			
+			task.delay(3, function()
+				noResults:Destroy()
+			end)
+		end
+		scanStarted = false
+	end
+end)
+
+CreateButton(ScrollFrame, "Remote Spy", function()
+	local Logs = {}
+	local IsSpying = false
+
+	if not IsSpying then
+		IsSpying = true
+
+		local function createLogWindow()
+			local logWindow = Instance.new("ScreenGui", game.CoreGui)
+			logWindow.ResetOnSpawn = false
+
+			local frame = Instance.new("Frame", logWindow)
+			frame.Size = UDim2.new(0, 500, 0, 400)
+			frame.Position = UDim2.new(0.5, -250, 0.5, -200)
+			frame.BackgroundColor3 = MENU_COLOR
+			Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 10)
+			MakeDraggable(frame)
+
+			local title = Instance.new("TextLabel", frame)
+			title.Size = UDim2.new(1, 0, 0, 30)
+			title.Text = "Remote Spy Logs"
+			title.TextColor3 = MENU_STROKE_COLOR
+			title.BackgroundTransparency = 1
+			title.Font = Enum.Font.GothamBold
+
+			local closeBtn = Instance.new("TextButton", frame)
+			closeBtn.Size = UDim2.new(0, 30, 0, 30)
+			closeBtn.Position = UDim2.new(1, -35, 0, 0)
+			closeBtn.Text = "✕"
+			closeBtn.BackgroundColor3 = CLOSE_BUTTON_COLOR
+			closeBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+			closeBtn.Font = Enum.Font.GothamBold
+			closeBtn.MouseButton1Click:Connect(function()
+				IsSpying = false
+				logWindow:Destroy()
+			end)
+
+			local scrollFrame = Instance.new("ScrollingFrame", frame)
+			scrollFrame.Size = UDim2.new(1, -20, 1, -50)
+			scrollFrame.Position = UDim2.new(0, 10, 0, 40)
+			scrollFrame.BackgroundTransparency = 1
+			scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+			scrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+			scrollFrame.ScrollBarThickness = 8
+
+			local logList = Instance.new("UIListLayout", scrollFrame)
+			logList.SortOrder = Enum.SortOrder.LayoutOrder
+			logList.Padding = UDim.new(0, 5)
+
+			return scrollFrame, logWindow
+		end
+
+		local logScrollFrame, logGui = createLogWindow()
+
+		local function addLogEntry(eventType, eventName, args)
+			local entryText = string.format("[%s] %s (%s): %s", os.date("%H:%M:%S"), eventType, eventName, table.concat(args, ", "))
+			local entry = Instance.new("TextLabel", logScrollFrame)
+			entry.Size = UDim2.new(1, 0, 0, 20)
+			entry.TextXAlignment = Enum.TextXAlignment.Left
+			entry.TextYAlignment = Enum.TextYAlignment.Top
+			entry.BackgroundTransparency = 1
+			entry.TextColor3 = Color3.new(1, 1, 1)
+			entry.TextSize = 14
+			entry.Text = entryText
+			entry.TextWrapped = true
+
+			logScrollFrame.CanvasSize = UDim2.new(0, 0, 0, logScrollFrame.CanvasSize.Y.Offset + 25)
+			logScrollFrame.CanvasPosition = Vector2.new(0, logScrollFrame.CanvasSize.Y.Offset)
+		end
+
+		local function hookRemote(remote)
+			local oldFireServer = remote.FireServer
+			remote.FireServer = function(...)
+				addLogEntry("FireServer", remote.Name, {...})
+				return oldFireServer(remote, ...)
+			end
+
+			local oldInvokeServer = remote.InvokeServer
+			remote.InvokeServer = function(...)
+				addLogEntry("InvokeServer", remote.Name, {...})
+				return oldInvokeServer(remote, ...)
+			end
+		end
+
+		for _, remote in ipairs(game:GetDescendants()) do
+			if remote:IsA("RemoteEvent") or remote:IsA("RemoteFunction") then
+				hookRemote(remote)
+			end
+		end
+
+	else
+		for _, gui in pairs(game.CoreGui:GetChildren()) do
+			if gui.Name == "RemoteSpyLogWindow" then
+				gui:Destroy()
+				IsSpying = false
+				break
+			end
+		end
+	end
 end)
 
 CreateButton(ScrollFrame, "Developer Console", function()
