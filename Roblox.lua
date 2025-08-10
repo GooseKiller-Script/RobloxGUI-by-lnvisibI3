@@ -438,34 +438,6 @@ CreateButton(ScrollFrame, "Close All GUI", function()
     end
 end)
 
-CreateButton(ScrollFrame, "Player Joined to server", function()
-    local player = game.Players.LocalPlayer
-    local mouse = player:GetMouse()
-    local nickname = mouse:PromptInput("Enter player nickname:", "text", "Player")
-
-    if nickname and nickname ~= "" then
-        local message = "/me " .. nickname .. " joined the server."
-        game:GetService("Chat"):Chat(message)
-    end
-end)
-
-CreateButton(ScrollFrame, "lnvisibI3 joined to server", function()
-    local nickname = "lnvisibI3"
-    local message = "/me " .. nickname .. " joined the server."
-    game:GetService("Chat"):Chat(message)
-end)
-
-CreateButton(ScrollFrame, "Write from server side", function()
-    local player = game.Players.LocalPlayer
-    local mouse = player:GetMouse()
-    local server_message = mouse:PromptInput("Enter server message:", "text", "Message")
-
-    if server_message and server_message ~= "" then
-        local message = "/me " .. server_message
-        game:GetService("Chat"):Chat(message)
-    end
-end)
-
 Icon.MouseButton1Click:Connect(function()
 	Menu.Visible = true
 	Icon.Visible = false
