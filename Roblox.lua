@@ -158,10 +158,6 @@ end
 local isSpying = false
 local remoteSpyLogWindow = nil
 
-CreateButton(ScrollFrame, "AntiCheat Detector", function()
-	print("Anti-cheat detector is currently empty")
-end)
-
 CreateButton(ScrollFrame, "Infinite Yield FE", function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
 end)
@@ -172,6 +168,18 @@ end)
 
 CreateButton(ScrollFrame, "lnvisibI3-GUI", function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/GooseKiller-Script/GK-GUI-By-GooseKiller-Universal-Roblox-Script/refs/heads/main/GUI.lua"))()
+end)
+
+CreateButton(ScrollFrame, "1x1x1x1gui", function()
+	loadstring(game:HttpGet(""))()
+end)
+
+CreateButton(ScrollFrame, "c00lgui", function()
+	loadstring(game:HttpGet(""))()
+end)
+
+CreateButton(ScrollFrame, "Tubers93gui", function()
+	loadstring(game:HttpGet(""))()
 end)
 
 CreateButton(ScrollFrame, "Place Scanner", function()
