@@ -171,15 +171,19 @@ CreateButton(ScrollFrame, "lnvisibI3-GUI", function()
 end)
 
 CreateButton(ScrollFrame, "1x1x1x1gui", function()
-	loadstring(game:HttpGet(""))()
+	loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-1x1x1x1-gui-44403"))()
 end)
 
 CreateButton(ScrollFrame, "c00lgui", function()
-	loadstring(game:HttpGet(""))()
+	loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-c00lgui-reborn-by-007n7-46306"))()
 end)
 
 CreateButton(ScrollFrame, "Tubers93gui", function()
-	loadstring(game:HttpGet(""))()
+	loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-tubers-93-GUI-29171"))()
+end)
+
+CreateButton(ScrollFrame, "John Doe", function()
+	loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Fe-John-doe-46160"))()
 end)
 
 CreateButton(ScrollFrame, "Place Scanner", function()
