@@ -166,8 +166,12 @@ CreateButton(ScrollFrame, "Dex Explorer", function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/peyton2465/Dex/master/out.lua"))()
 end)
 
-CreateButton(ScrollFrame, "lnvisibI3-GUI", function()
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/GooseKiller-Script/GK-GUI-By-GooseKiller-Universal-Roblox-Script/refs/heads/main/GUI.lua"))()
+CreateButton(ScrollFrame, "GK-GUI", function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/MrN3lson-Script/GK-GUI-Universal-Roblox-Script/refs/heads/main/GUI.lua"))()
+end)
+
+CreateButton(ScrollFrame, "GameMaster", function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/MrN3lson-Script/GameMaster-Universal-Roblox-Script/refs/heads/main/Master"))()
 end)
 
 CreateButton(ScrollFrame, "1x1x1x1gui", function()
